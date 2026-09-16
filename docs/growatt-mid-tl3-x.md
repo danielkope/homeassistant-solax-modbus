@@ -20,7 +20,13 @@ Unknown status and derating values retain their numeric code. Warning fields and
 - Per-phase apparent power is in VA, not W. It is not the site's grid import/export measurement.
 - Existing per-MPPT daily energy sensors may need enabling on the Entities page. Newly enabled sensors have no backfilled history.
 - A field capture showed internally consistent instantaneous PV power but AC energy counters larger than reported DC counters. The cause has not been established. Do not rescale, reset, or compute conversion efficiency from those counters merely to force agreement. Compare the inverter display and firmware-specific documentation first. For this battery-free inverter, the native AC production counter represents generated AC energy.
+- The documented daily AC energy counter is input 53–54 (`Eactoday`, 0.1 kWh). Daily PV counters begin at 59–60 and repeat every four registers per tracker, also in 0.1 kWh. These are not documented as reactive (kvarh) or apparent (kVAh) energy. Reactive power therefore does not explain the observed discrepancy under the documented interpretation; firmware-specific behavior remains unverified.
+- To investigate counter disagreement, capture synchronized counter changes over a common daylight interval and compare them with time-integrated DC input and active AC output power. Account for 0.1 kWh quantization, missing samples and daily resets. A difference in absolute totals alone does not establish a scaling correction.
 - Set integration capacity to the actual installation rating (36 kW for a single MID 36KTL3-X). This affects integration validation, not the inverter's configured output limit.
+
+## Site-specific configuration
+
+Keep roof names, orientation, panel counts and dashboard layouts in local Home Assistant configuration, outside this integration. MPPT numbers identify electrical inputs, not compass directions. Voltage may help estimate series length for identical panels, but shading, bypass operation, temperature and parallel strings prevent it from proving roof assignments. Compare time-aligned voltage and power histories; a peak from partial recording is not a full-day maximum.
 
 ## Verification and updates
 
